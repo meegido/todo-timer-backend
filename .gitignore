@@ -7,8 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-
-.DS_Store
+dist
+dist-ssr
+*.local
 
 # Runtime data
 pids
@@ -16,15 +17,6 @@ pids
 *.seed
 *.pid.lock
 
-
-# nyc test coverage
-.nyc_output
-
-
-
-# Dependency directories
-node_modules/
-jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -58,20 +50,16 @@ web_modules/
 .env.local
 
 
-# vuepress v2.x temp and cache directory
-.temp
-.cache
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+node_modules
 
-# vitepress build output
-**/.vitepress/dist
-
-# vitepress cache directory
-**/.vitepress/cache
-
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
 

@@ -1,6 +1,11 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { Todo, CreateTodoDTO, UpdateTodoDTO, TodoVariant } from '../../domain/Todo';
-import { TodoRepository } from '../../domain/TodoRepository';
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import {
+  Todo,
+  CreateTodoDTO,
+  UpdateTodoDTO,
+  TodoVariant,
+} from "../../domain/Todo";
+import { TodoRepository } from "../../domain/TodoRepository";
 
 export class SupabaseTodoRepository implements TodoRepository {
   private supabase: SupabaseClient;
@@ -10,7 +15,9 @@ export class SupabaseTodoRepository implements TodoRepository {
     const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing Supabase credentials');
+      throw new Error(
+        "Missing Supabase credentials. Please set environment variables."
+      );
     }
 
     this.supabase = createClient(supabaseUrl, supabaseKey);
@@ -18,9 +25,9 @@ export class SupabaseTodoRepository implements TodoRepository {
 
   async findAll(): Promise<Todo[]> {
     const { data, error } = await this.supabase
-      .from('todos')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("todos")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data.map(this.mapToTodo);
@@ -28,9 +35,9 @@ export class SupabaseTodoRepository implements TodoRepository {
 
   async findById(id: string): Promise<Todo | null> {
     const { data, error } = await this.supabase
-      .from('todos')
-      .select('*')
-      .eq('id', id)
+      .from("todos")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) return null;
@@ -39,13 +46,15 @@ export class SupabaseTodoRepository implements TodoRepository {
 
   async create(todoData: CreateTodoDTO): Promise<Todo> {
     const { data, error } = await this.supabase
-      .from('todos')
-      .insert([{
-        title: todoData.title,
-        description: todoData.description,
-        variant: todoData.variant,
-        completed: false,
-      }])
+      .from("todos")
+      .insert([
+        {
+          title: todoData.title,
+          description: todoData.description,
+          variant: todoData.variant,
+          completed: false,
+        },
+      ])
       .select()
       .single();
 
@@ -56,14 +65,16 @@ export class SupabaseTodoRepository implements TodoRepository {
   async update(id: string, todoData: UpdateTodoDTO): Promise<Todo | null> {
     const updateData: any = {};
     if (todoData.title !== undefined) updateData.title = todoData.title;
-    if (todoData.description !== undefined) updateData.description = todoData.description;
-    if (todoData.completed !== undefined) updateData.completed = todoData.completed;
+    if (todoData.description !== undefined)
+      updateData.description = todoData.description;
+    if (todoData.completed !== undefined)
+      updateData.completed = todoData.completed;
     if (todoData.variant !== undefined) updateData.variant = todoData.variant;
 
     const { data, error } = await this.supabase
-      .from('todos')
+      .from("todos")
       .update(updateData)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -72,10 +83,7 @@ export class SupabaseTodoRepository implements TodoRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const { error } = await this.supabase
-      .from('todos')
-      .delete()
-      .eq('id', id);
+    const { error } = await this.supabase.from("todos").delete().eq("id", id);
 
     return !error;
   }
